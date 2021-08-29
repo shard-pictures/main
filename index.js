@@ -6,7 +6,7 @@ const fs = require("fs")
 const base85 = require("base85");
 const Database = require("@replit/database")
 const db = new Database()
-const urls = ["art.cnnd.art", "cnnd.fun", "fun.cnnd.fun", "xyz.cnnd.xyz", "life.ifunny.life", "uk.co.cnnd.co.uk"]
+const domains = process.env["domains"].split(",");
 
 // db.list().then(keys => {
 //   console.log(keys)
@@ -54,7 +54,7 @@ app.post("/upload", (req, res) => {
   const savename = genFn() + fileext;
   // const savename = "favicon.ico"; // to force a filename
   db.set(savename, Buffer.from(req.body, "binary").toString("base64")).then(() => {
-    return res.send(`https://${urls[Math.floor(Math.random() * (urls.length - 1))]}/${savename}`);
+    return res.send(`https://${domains[Math.floor(Math.random() * (domains.length - 1))]}/${savename}`);
   });
   // fs.writeFile(__dirname + '/uploads/' + savename, Buffer.from(req.body), err => {
   //   if (err) {
