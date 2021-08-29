@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+body {
+  background: black;
+  margin: 0;
+}
+.container {
+  text-align: center;
+  font-family: "Noto Sans JP";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #d48ae7;
+  text-shadow: white 0 0 50px;
+  font-size: 125px;
+  user-select: none;
+  cursor: pointer;
+}
