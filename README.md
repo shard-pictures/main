@@ -14,11 +14,11 @@ bob,jane,tim
 example.org,example.com,foo.example.com,bar.example.org
 ```
 **Example forwarding page rule**
-![ForwardingPageRule](https://art.cnnd.art/+9piAyv.png)
+![ForwardingPageRule](https://raw.githubusercontent.com/connordennison/ReplDB-CDN/441f5ebc5a1d6f6cdc6634b4a7fa3c6cfc26d747/images/PageRule.png)
 
 Make sure your Repl stays online! 
 - Use a pinging service (such as [UptimeRobot](//uptimerobot.com/))
 
 or
 
-- Buy hacker plan to keep your Repl always on ![AlwaysOn](https://xyz.cnnd.xyz/c+D7dgU.png)
+- Buy hacker plan to keep your Repl always on ![AlwaysOn](https://raw.githubusercontent.com/connordennison/ReplDB-CDN/441f5ebc5a1d6f6cdc6634b4a7fa3c6cfc26d747/images/AlwaysOn.png)
