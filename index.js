@@ -39,9 +39,20 @@ app.get("/*", (req, res) => {
   // }
   // console.log(req.path.substring(1))
   db.get(req.path.substring(1)).then((val) => {
-    if (val == null) {return res.status(404).send("File not found (；′⌒`)");}
-    res.write(Buffer.from(val, "base64"));
-    res.end();
+    // if (val == null) {return res.status(404).send("File not found (；′⌒`)");}
+    if (val == null) {
+      fs.readFile(__dirname + "/static/fileNotFound.png", (err, data) => {
+        if(err) {
+          console.log(err);
+          return
+        }
+        res.status(307).write(data);
+        return res.end();
+      })
+    } else {
+      res.write(Buffer.from(val, "base64"));
+      res.end();
+    }
   })
 })
 
