@@ -12,7 +12,7 @@ body {
   transform: translate(-50%, -50%);
   color: #d48ae7;
   text-shadow: white 0 0 50px;
-  font-size: 125px;
+  font-size: 15vmin;
   user-select: none;
   cursor: pointer;
 }
