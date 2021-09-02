@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css">
+	<link rel="stylesheet" href="https://water-css-custom.piemadd.repl.co/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>config | shard.pictures</title>
+</head>
+<body>
+<div class="eee">
+		<div>
+<p><b>Choose the domains you would like your ShareX config to use: </b></p>
+<form action="/sharex/<%= repl_id %>">
+  <% for(var i = 0; i < domains.length; i++) { %>
+    <input type="checkbox" name="<%= domains[i] %>" value="<%= domains[i] %>">
+    <label for="<%= domains[i] %>"><%= domains[i] %></label><br>
+  <% } %>
+  <br>
+  <input type="submit" value="Generate">
+</form>
+</div>
+</div>
+
+</body>
+</html>

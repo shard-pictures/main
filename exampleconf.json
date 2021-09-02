@@ -5,10 +5,10 @@
   "RequestURL": "https://shard.pictures/upload",
   "Parameters": {
     "og": "$filename$",
-    "baseSite": "shard.pictures,imgoingtobiteyou.com"
+    "baseSite": "PUTSITESHERE"
   },
   "Headers": {
-    "token": "POOPYHEAD123"
+    "token": "PUTTOKENHERE"
   },
   "Body": "Binary"
 }

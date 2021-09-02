@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css">
+	<link rel="stylesheet" href="https://water-css-custom.piemadd.repl.co/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>dash | shard.pictures</title>
+</head>
+<body>
+	<fieldset>
+	<legend>Dashboard | shard.pictures</legend>
+	<table style="width:100%">
+		<!-- <tr><th>URL ID</th><th>Resulting URL</th><th>Delete</th><th>Edit</th></tr> -->
+			<tr>
+      <% for(var i = 0; i < repls.length; i++) { %>
+        <td><%= repls[i] %></td>
+				<td><a href="https://shard.pictures/dashboard/regenerate/<%= repls[i] %>">Regenerate token</a></td>
+				<td><a href="https://shard.pictures/dashboard/rolldown/<%= repls[i] %>">Rolldown repl</a></td>
+				<td><a href="https://shard.pictures/dashboard/sharex/<%= repls[i] %>">Download ShareX config</a></td>
+        <td><a href="https://shard.pictures/dashboard/token/<%= repls[i] %>">View Your Token</a></td>
+      <% } %>
+			</tr>
+	</table>
+	</fieldset>
+</body>
+</html>
