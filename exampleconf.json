@@ -1,0 +1,14 @@
+{
+  "Version": "13.5.0",
+  "DestinationType": "ImageUploader, TextUploader, FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://shard.pictures/upload",
+  "Parameters": {
+    "og": "$filename$",
+    "baseSite": "shard.pictures,imgoingtobiteyou.com"
+  },
+  "Headers": {
+    "token": "POOPYHEAD123"
+  },
+  "Body": "Binary"
+}
