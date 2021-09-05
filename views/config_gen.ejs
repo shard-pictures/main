@@ -10,7 +10,7 @@
 <div class="eee">
 		<div>
 <p><b>Choose the domains you would like your ShareX config to use: </b></p>
-<form action="/sharex/<%= repl_id %>">
+<form action="/<%= application %>/<%= repl_id %>">
   <% for(var i = 0; i < domains.length; i++) { %>
     <input type="checkbox" name="<%= domains[i] %>" value="<%= domains[i] %>">
     <label for="<%= domains[i] %>"><%= domains[i] %></label><br>

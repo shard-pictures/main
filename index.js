@@ -19,22 +19,28 @@ const ping = async (token=0) => {
     return "<style>body{background:black;color:white;}</style>You are unauthenticated!";
   }
   total_db_size_used = 0;
-  for (const key of Object.keys(storage_tokens)) {
+  for (const key of Object.keys(storage_amounts)) {
     let offline = false;
-    let response = await fetch(`https://${key.split("_")[1]}.${key.split("_")[0]}.repl.co/ping`).catch(() => {
-      console.log(`Repl ${key} is offline, revoking token and removing from network.`)
-      delete storage_amounts[key]
-      delete storage_tokens[key]
-      db.delete(`token_${key}`)
+    let response = await fetch(`https://${key.split("_")[1]}.${key.split("_")[0]}.repl.co/ping`).catch(async () => {
+      console.log(`Repl ${key} is offline, revoking token and removing from network. - request error`)
+      await delete storage_amounts[key]
+      //await delete storage_tokens[key]
+      await db.delete(`token_${key}`)
+      await db.set('storage_amounts', storage_amounts)
+      //await db.set('storage_tokens', storage_tokens)
       offline = true;
     })
-    if (offline) {break}
+    if (offline) {continue}
     if (!response.ok) {
-      console.log(`Repl ${key} is offline, revoking token and removing from network.`)
-      delete storage_amounts[key]
-      delete storage_tokens[key]
-      db.delete(`token_${key}`)
+      console.log(`Repl ${key} is offline, revoking token and removing from network. - Non ok response`)
+      await delete storage_amounts[key]
+      //await delete storage_tokens[key]
+      await db.delete(`token_${key}`)
+      await db.set('storage_amounts', storage_amounts)
+      //await db.set('storage_tokens', storage_tokens)
+      offline = true;
     }
+    if (offline) {continue}
     storage_amounts[key] = await response.text()
     storage_tokens[key] = await db.get(`token_${key}`)
     console.log(`Pinged ${key.split("_")[1]}.${key.split("_")[0]}.repl.co`);
@@ -88,6 +94,10 @@ app.get("/ping", async (req, res) => {
 
 app.get("/imalive/:repl_owner/:repl_slug", async (req, res) => {
   let auth_token;
+  let blacklist = ['five-nine'];
+  if (req.params.repl_owner == 'five-nine') {
+    res.status(401).send("poop")
+  }
   try {
     auth_token = await db.get(`token_${req.params.repl_owner}_${req.params.repl_slug}`)
     .then(async token => {
@@ -135,7 +145,7 @@ app.post("/upload", async (req, res) => {
     return res.status(401).send("You are unauthenticated!")
   }
 
-  let list_of_servers = Object.keys(storage_amounts)
+  let list_of_servers = Object.keys(storage_amounts).splice('piemadd_RuSXLwR38U3')
   let server_most_available = list_of_servers[0];
   for (let i = 0; i < list_of_servers.length; i++) {
     if (storage_amounts[list_of_servers[i]] < storage_amounts[server_most_available]) {
@@ -143,16 +153,18 @@ app.post("/upload", async (req, res) => {
     }
   }
 
-  //server_most_available = 'piemadd_repldb-cdn-storage'
+  // server_most_available = 'piemadd_repldb-cdn-storage' // why was this still uncommented lmao
 
   let server_url = `https://${server_most_available.split('_')[1]}.${server_most_available.split('_')[0]}.repl.co/upload`
+
+  if (req.query["preferredHost"]) {server_url = `https://${req.query["preferredHost"]}.repl.co/upload`}
   
   let server_token = await db.get(`token_${server_most_available}`)
 
   const filename = req.query["og"];
   const fileext = filename.split(".")[filename.split(".").length - 1];
   
-  const base_sites = req.query['base_sites'].split(',')
+  const base_sites = req.query['baseSite'].split(',')
   const base_site = base_sites[Math.floor(Math.random() * base_sites.length)]
 
   let data_base64 = await Buffer.from(req.body, "binary").toString("base64")
@@ -160,12 +172,16 @@ app.post("/upload", async (req, res) => {
   let response = await fetch(server_url, { method: 'POST', body: JSON.stringify({'data': data_base64, 'savename': savename}), headers: { token: server_token, 'content-type': 'application/json' } })
   let response_from_server = await response.text()
   if (response_from_server != 'upload complete') {
+    console.log(response_from_server)
+    console.log(server_most_available)
     res.status(500).send("There was an error with uploading your image to the target server")
   } else {
     res.send('https://' + base_site + '/' + savename)
   }
 });
 const confirm_allowed = async (username) => {
+  console.log(username)
+  if (username == null || username == "") {return false}
   let active_repls_list = Object.keys(storage_tokens)
   for (let i = 0; i < active_repls_list.length; i++) {
     if (active_repls_list[i].indexOf(username) >= 0) {
@@ -189,12 +205,28 @@ app.get("/dashboard", async (req, res) => {
   }
 })
 
-app.get("/dashboard/sharex/:repl_id", async (req, res) => {
+app.get("/dashboard/token/:repl_id", async (req, res) => {
+  if (!req.params['repl_id'].startsWith(req.headers['x-replit-user-name'])) {
+    res.status(403).send("That isn't your repl!")
+  }
+  const token = await db.get(`token_${req.params['repl_id']}`)
+  return res.render(__dirname + "/views/show_token", {token: token})
+})
+
+app.get("/dashboard/regenerate/:repl_id", async (req, res) => {
+  if (!req.params['repl_id'].startsWith(req.headers['x-replit-user-name'])) {
+    res.status(403).send("That isn't your repl!")
+  }
+  return res.render(__dirname + "/views/regenerate", {repl_id: req.params['repl_id']})
+})
+
+app.get("/dashboard/:application/:repl_id", async (req, res) => {
   if (await confirm_allowed(req.headers['x-replit-user-name'])) {
     if (req.params['repl_id'].startsWith(req.headers['x-replit-user-name'])) {
       res.render(__dirname + "/views/config_gen", {
         domains: domains,
-        repl_id: req.params['repl_id']
+        repl_id: req.params['repl_id'],
+        application: req.params['application']
       })
     } else {
       res.status(403).send("That isn't your repl!")
@@ -210,25 +242,22 @@ app.get("/sharex/:repl_id", async (req, res) => {
   }
   const token = await db.get(`token_${req.params['repl_id']}`)
   const domains_string = JSON.stringify(Object.values(req.query))
-  const domains_string_final = domains_string.split("\"").join("").substring(1, domains_string.length - 1)
+  const domains_string_final = domains_string.split("\"").join("").replace("[", "").replace("]", "")
   console.log(domains_string_final)
   let template = JSON.parse(fs.readFileSync('exampleconf.json').toString().replace('PUTSITESHERE', domains_string_final).replace('PUTTOKENHERE', token));
   return res.attachment(`shard_pictures.sxcu`).send(template)
 })
 
-app.get("/dashboard/token/:repl_id", async (req, res) => {
+app.get("/ksnip/:repl_id", async (req, res) => {
   if (!req.params['repl_id'].startsWith(req.headers['x-replit-user-name'])) {
     res.status(403).send("That isn't your repl!")
   }
   const token = await db.get(`token_${req.params['repl_id']}`)
-  return res.render(__dirname + "/views/show_token", {token: token})
-})
-
-app.get("/dashboard/regenerate/:repl_id", async (req, res) => {
-  if (!req.params['repl_id'].startsWith(req.headers['x-replit-user-name'])) {
-    res.status(403).send("That isn't your repl!")
-  }
-  return res.render(__dirname + "/views/regenerate", {repl_id: req.params['repl_id']})
+  const domains_string = JSON.stringify(Object.values(req.query))
+  const domains_string_final = domains_string.split("\"").join("").replace("[", "").replace("]", "")
+  console.log(domains_string_final)
+  let template = fs.readFileSync('exampleconf.sh').toString().replace('PUTSITESHERE', domains_string_final).replace('PUTTOKENHERE', token);
+  return res.attachment(`shard_pictures.sh`).send(template)
 })
 
 app.get("/regenerate/:repl_id", async (req, res) => {
@@ -318,7 +347,7 @@ app.get("/:imageID", async (req, res) => {
 
   let replacements = await db.get(`${image_id.split("_")[0]}_${image_id.split("_")[1]}`)
 
-  if (replacements.indexOf(image_id) > -1) {
+  if (replacements != null && replacements.indexOf(image_id) > -1) {
     image_id = replacements[image_id]
   }
 

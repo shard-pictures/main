@@ -1,0 +1,1 @@
+curl -XPOST --silent --upload-file $1 -H 'token: PUTTOKENHERE' 'https://shard.pictures/upload?baseSite=PUTSITESHERE&og=test.png'

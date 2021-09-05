@@ -8,16 +8,19 @@
 </head>
 <body>
 	<fieldset>
-	<legend>Dashboard | shard.pictures</legend>
+	<legend>dash | shard.pictures</legend>
 	<table style="width:100%">
 		<!-- <tr><th>URL ID</th><th>Resulting URL</th><th>Delete</th><th>Edit</th></tr> -->
-			<tr>
+			<tr><th>repl id</th><th>sharex config</th><th>ksnip config</th><th>view</th><th>regenerate</th><th>rolldown</th></tr>
       <% for(var i = 0; i < repls.length; i++) { %>
+      <tr>
         <td><%= repls[i] %></td>
-				<td><a href="https://shard.pictures/dashboard/regenerate/<%= repls[i] %>">Regenerate token</a></td>
-				<td><a href="https://shard.pictures/dashboard/rolldown/<%= repls[i] %>">Rolldown repl</a></td>
-				<td><a href="https://shard.pictures/dashboard/sharex/<%= repls[i] %>">Download ShareX config</a></td>
-        <td><a href="https://shard.pictures/dashboard/token/<%= repls[i] %>">View Your Token</a></td>
+        <td><a href="https://shard.pictures/dashboard/sharex/<%= repls[i] %>">download sharex config</a></td>
+        <td><a href="https://shard.pictures/dashboard/ksnip/<%= repls[i] %>">download ksnip config</a></td>
+        <td><a href="https://shard.pictures/dashboard/token/<%= repls[i] %>">view your token</a></td>
+				<td><a href="https://shard.pictures/dashboard/regenerate/<%= repls[i] %>">regenerate token</a></td>
+				<td><a href="https://shard.pictures/dashboard/rolldown/<%= repls[i] %>">rolldown repl</a></td>
+        </tr>
       <% } %>
 			</tr>
 	</table>
