@@ -11,7 +11,7 @@ These are direct links to the releases page on each's GitHub page, feel free
 [Windows Portable](https://github.com/ShareX/ShareX/releases/download/v13.5.0/ShareX-portable.zip)
 
 #### ksnip
-[macOS](https://github.com/ksnip/ksnip/releases/download/v1.9.0/ksnip-1.9.0.dmg)
+[Releases Page](https://github.com/ksnip/ksnip/releases/tag/v1.9.0)
 
 
 ### Installing config

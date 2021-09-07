@@ -1,0 +1,80 @@
+body {
+  background: var(--bg-base);
+  color: var(--fg-base);
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+::selection {
+  background: var(--bg-accent);
+}
+
+a {text-decoration: none;transition: color .25s;}
+a:link {color: var(--fg-accent);}
+a:visited {color: var(--fg-accent);}
+a:hover {color: var(--fg-base);}
+
+.accent {
+  color: var(--fg-accent);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 100px;
+  padding-top: 20px;
+  padding-bottom: 50px;
+  gap: 20px;
+  animation: fadein 1s 1;
+}
+
+.container .title {
+  font-weight: 900;
+  font-size: 46px;
+}
+
+.container .content {
+  margin-top: 5px;
+  font-size: 24px;
+}
+
+.info-buttons {
+  margin-top: 10vmin;
+  display: flex;
+  flex-direction: row;
+  gap: 10vmin;
+  font-size: 14px;
+}
+
+.info-buttons .button {
+  transition: 100ms;
+  border-radius: 20px;
+  background: var(--bg-accent);
+  padding: 10px 25px 10px 25px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.info-buttons .button:active {
+  transform: translateY(5px);
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}

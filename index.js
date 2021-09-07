@@ -23,7 +23,7 @@ const ping = async (token=0) => {
     let offline = false;
     let response = await fetch(`https://${key.split("_")[1]}.${key.split("_")[0]}.repl.co/ping`).catch(async () => {
       console.log(`Repl ${key} is offline, revoking token and removing from network. - request error`)
-      await delete storage_amounts[key]
+      //await delete storage_amounts[key]
       //await delete storage_tokens[key]
       await db.delete(`token_${key}`)
       await db.set('storage_amounts', storage_amounts)
@@ -33,7 +33,7 @@ const ping = async (token=0) => {
     if (offline) {continue}
     if (!response.ok) {
       console.log(`Repl ${key} is offline, revoking token and removing from network. - Non ok response`)
-      await delete storage_amounts[key]
+      //await delete storage_amounts[key]
       //await delete storage_tokens[key]
       await db.delete(`token_${key}`)
       await db.set('storage_amounts', storage_amounts)
